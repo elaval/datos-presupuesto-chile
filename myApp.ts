@@ -255,7 +255,9 @@ class PresupuestoHistorico {
 
         _.each(this.records, (d,i) => {
             console.log('normalise', Math.floor(100*i/this.records.length));
-            d.partida = this.dictionary.getPartida(d.codPartida);
+            d.partida = this.dictionary.getPartida({codPartida : d.codPartida}) ? this.dictionary.getPartida({codPartida : d.codPartida}) : d.partida;
+            d.capitulo = this.dictionary.getCapitulo({codPartida : d.codPartida, codCapitulo: d.codCapitulo}) ? this.dictionary.getCapitulo({codPartida : d.codPartida, codCapitulo: d.codCapitulo}) : d.capitulo;
+            d.programa = this.dictionary.getPrograma({codPartida : d.codPartida, codCapitulo: d.codCapitulo, codPrograma: d.codPrograma}) ? this.dictionary.getPrograma({codPartida : d.codPartida, codCapitulo: d.codCapitulo, codPrograma: d.codPrograma}) : d.programa;
         })
     }
 }
@@ -275,18 +277,26 @@ class DiccionarioProgramas {
 
             const itemsByCapitulo = _.groupBy(itemsCapitulo, (d) => d.codCapitulo)
             _.each(itemsByCapitulo, (itemsPrograma:ItemPresupuesto[],codCapitulo)  => {
-                this.dictionary[codPartida][codCapitulo] = this.dictionary[codPartida][codCapitulo] || { nombre:_.first(itemsPrograma).capitulo, programas: {}};
+                this.dictionary[codPartida].capitulos[codCapitulo] = this.dictionary[codPartida].capitulos[codCapitulo] || { nombre:_.first(itemsPrograma).capitulo, programas: {}};
 
                 const itemsByPrograma = _.groupBy(itemsPrograma, (d) => d.codPrograma);
                 _.each(itemsByPrograma, (itemsAsignacion:ItemPresupuesto[], codPrograma) => {
-                    this.dictionary[codPartida][codCapitulo][codPrograma] = this.dictionary[codPartida][codCapitulo][codPrograma] || { nombre:_.first(itemsAsignacion).programa};
+                    this.dictionary[codPartida].capitulos[codCapitulo].programas[codPrograma] = this.dictionary[codPartida].capitulos[codCapitulo].programas[codPrograma] || { nombre:_.first(itemsAsignacion).programa};
                 })
             });
         })
     }
 
-    getPartida(codPartida) {
-        return this.dictionary[codPartida] && this.dictionary[codPartida].nombre;
+    getPartida(options:{codPartida:string}) {
+        return this.dictionary[options.codPartida] && this.dictionary[options.codPartida].nombre;
+    }    
+    
+    getCapitulo(options:{codPartida:string, codCapitulo:string}) {
+        return this.dictionary[options.codPartida] && this.dictionary[options.codPartida].capitulos[options.codCapitulo] && this.dictionary[options.codPartida].capitulos[options.codCapitulo].nombre;
+    }    
+
+    getPrograma(options:{codPartida:string, codCapitulo:string, codPrograma:string}) {
+        return this.dictionary[options.codPartida] && this.dictionary[options.codPartida].capitulos[options.codCapitulo]  && this.dictionary[options.codPartida].capitulos[options.codCapitulo].programas[options.codPrograma] && this.dictionary[options.codPartida].capitulos[options.codCapitulo].programas[options.codPrograma].nombre;
     }
 
 
