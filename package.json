@@ -1,0 +1,25 @@
+{
+  "name": "presupuesto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^8.0.13",
+    "d3-dsv": "^1.0.5",
+    "d3-format": "^1.2.0",
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-typescript": "^3.2.0",
+    "i": "^0.3.5",
+    "lodash": "^4.17.4",
+    "read-text-file": "^1.1.0",
+    "request": "^2.81.0",
+    "typescript": "^2.4.1",
+    "write": "^0.3.3"
+  }
+}

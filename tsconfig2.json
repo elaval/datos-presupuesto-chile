@@ -1,0 +1,12 @@
+
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["es5", "es6", "dom"]
+  },
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
+}
